@@ -1,3 +1,5 @@
+//go:build !test
+
 package main
 
 import (
@@ -5,6 +7,7 @@ import (
 	"net"
 	"os"
 
+	pb "github.com/github.com/grpc-test/proto/todo/v1"
 	"google.golang.org/grpc"
 )
 
@@ -31,7 +34,9 @@ func main() {
 	var opts []grpc.ServerOption
 	s := grpc.NewServer(opts...)
 
-	//registration of endpoints
+	pb.RegisterTodoServiceServer(s, &server{
+		d: New(),
+	})
 
 	log.Printf("listening at %s\n", addr)
 
